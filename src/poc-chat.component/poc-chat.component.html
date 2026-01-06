@@ -1,0 +1,40 @@
+<div class="wrap">
+  <h2>AdventureWorks POC Chat (SSE)</h2>
+
+  <div class="row">
+    <label>API Key (optional)</label>
+    <input [(ngModel)]="apiKey" placeholder="x-api-key (leave empty if not used)" />
+  </div>
+
+  <div class="chat">
+    <div *ngFor="let m of messages" class="msg" [class.user]="m.role==='user'" [class.assistant]="m.role==='assistant'">
+      <div class="role">{{ m.role }}</div>
+      <pre class="text">{{ m.text }}</pre>
+    </div>
+  </div>
+
+  <div class="meta" *ngIf="meta">
+    <h3>Meta</h3>
+    <div><b>SQL:</b></div>
+    <pre>{{ meta?.sql }}</pre>
+    <div><b>Row Count:</b> {{ meta?.rowCount }}</div>
+    <details>
+      <summary>Preview rows</summary>
+      <pre>{{ meta?.previewRows | json }}</pre>
+    </details>
+  </div>
+
+  <div class="row">
+    <textarea [(ngModel)]="question" rows="3" placeholder="Ask something like: Top 5 customers by total sales"></textarea>
+  </div>
+
+  <div class="actions">
+    <button (click)="send()" [disabled]="isStreaming || !question.trim()">Send</button>
+    <button (click)="clear()" [disabled]="isStreaming">Clear</button>
+  </div>
+
+  <div class="status">
+    <span *ngIf="isStreaming">Streaming…</span>
+    <span *ngIf="error" class="err">{{ error }}</span>
+  </div>
+</div>
